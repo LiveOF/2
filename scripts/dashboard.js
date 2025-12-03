@@ -39,9 +39,10 @@
     // Build comments HTML
     let commentsHtml = '';
     if (subject.comments && subject.comments.length > 0) {
-      commentsHtml = subject.comments
-        .filter(c => c && c.comment)
-        .slice(0, 5) // Show last 5 comments
+      const validComments = subject.comments.filter(c => c && c.comment);
+      const displayedComments = validComments.slice(0, 5); // Show last 5 comments
+      
+      commentsHtml = displayedComments
         .map(c => `
           <div class="comment-item">
             <p class="comment-text mb-1">${escapeHtml(c.comment)}</p>
@@ -50,8 +51,8 @@
         `)
         .join('');
       
-      if (subject.comments.length > 5) {
-        commentsHtml += `<p class="text-muted small mt-2">... and ${subject.comments.length - 5} more comments</p>`;
+      if (validComments.length > 5) {
+        commentsHtml += `<p class="text-muted small mt-2">... and ${validComments.length - 5} more comments</p>`;
       }
     }
 
@@ -126,8 +127,15 @@
     }
   }
 
-  // Export for use by feedback.js
+  // Export for use by other scripts
   window.refreshDashboard = loadDashboard;
+
+  // Listen for cross-tab updates when feedback is submitted
+  window.addEventListener('storage', (event) => {
+    if (event.key === 'feedbackSubmitted') {
+      loadDashboard();
+    }
+  });
 
   // Initial load
   loadDashboard();

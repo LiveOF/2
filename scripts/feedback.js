@@ -127,10 +127,9 @@
 
       alert('Thanks for your feedback!');
       reset(rows);
-      // Trigger dashboard refresh if it's open in another tab
-      if (window.opener && typeof window.opener.refreshDashboard === 'function') {
-        window.opener.refreshDashboard();
-      }
+      // Notify other tabs/windows that feedback was submitted
+      // Using localStorage event for cross-tab communication
+      localStorage.setItem('feedbackSubmitted', Date.now().toString());
     } catch (e) {
       console.error(e);
       alert('Failed to submit feedback. Please try again.');
