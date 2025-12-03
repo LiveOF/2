@@ -127,6 +127,9 @@
 
       alert('Thanks for your feedback!');
       reset(rows);
+      // Notify other tabs/windows that feedback was submitted
+      // Using localStorage event for cross-tab communication
+      localStorage.setItem('feedbackSubmitted', Date.now().toString());
     } catch (e) {
       console.error(e);
       alert('Failed to submit feedback. Please try again.');

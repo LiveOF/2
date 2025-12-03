@@ -74,6 +74,53 @@ app.get('/api/feedback', async (_req, res) => {
   res.json(rows);
 });
 
+// GET /api/dashboard — aggregated data for dashboard view
+app.get('/api/dashboard', async (_req, res) => {
+  try {
+    // Aggregate by subject to get average grade and all comments
+    const aggregation = await Feedback.aggregate([
+      { $unwind: '$items' },
+      {
+        $group: {
+          _id: '$items.subject',
+          averageGrade: { $avg: '$items.rating' },
+          totalResponses: { $sum: 1 },
+          comments: {
+            $push: {
+              $cond: [
+                { $ne: ['$items.comments', ''] },
+                { comment: '$items.comments', timestamp: '$timestamp' },
+                '$$REMOVE'
+              ]
+            }
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          subject: '$_id',
+          averageGrade: { $round: ['$averageGrade', 2] },
+          totalResponses: 1,
+          comments: {
+            $filter: {
+              input: '$comments',
+              as: 'c',
+              cond: { $ne: ['$$c', null] }
+            }
+          }
+        }
+      },
+      { $sort: { subject: 1 } }
+    ]);
+
+    res.json(aggregation);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch dashboard data' });
+  }
+});
+
 async function start() {
   const uri = process.env.MONGODB_URI;
   const dbName = process.env.MONGODB_DB || 'feedback_form';

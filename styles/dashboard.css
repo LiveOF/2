@@ -1,0 +1,78 @@
+/* Dashboard-specific styles */
+
+body {
+  background-color: #f5f7fa;
+  min-height: 100vh;
+}
+
+.subject-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.subject-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.grade-badge {
+  font-size: 2rem;
+  font-weight: 700;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+}
+
+.grade-excellent {
+  background: linear-gradient(135deg, #52d869, #3cc955);
+  color: white;
+}
+
+.grade-good {
+  background: linear-gradient(135deg, #7ed321, #5eb91b);
+  color: white;
+}
+
+.grade-average {
+  background: linear-gradient(135deg, #ff9a3c, #f0850a);
+  color: white;
+}
+
+.grade-poor {
+  background: linear-gradient(135deg, #ff6b6b, #f04444);
+  color: white;
+}
+
+.comment-item {
+  background-color: #f8f9fa;
+  border-left: 3px solid #0d6efd;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0 4px 4px 0;
+}
+
+.comment-item:last-child {
+  margin-bottom: 0;
+}
+
+.comment-text {
+  margin-bottom: 0.25rem;
+}
+
+.comment-date {
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.no-comments {
+  color: #6c757d;
+  font-style: italic;
+}
+
+.responses-count {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
