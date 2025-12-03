@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Küberkaitse Põgenemistuba</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Start Screen -->
+    <div id="start-screen" class="screen active">
+        <div class="cyber-grid"></div>
+        <div class="floating-particles"></div>
+        <div class="start-content">
+            <div class="logo-container">
+                <div class="cyber-shield">
+                    <svg viewBox="0 0 100 100" class="shield-svg">
+                        <defs>
+                            <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#00f5ff;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#0066ff;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M50 5 L90 20 L90 50 Q90 80 50 95 Q10 80 10 50 L10 20 Z" 
+                              fill="url(#shieldGradient)" stroke="#00f5ff" stroke-width="2"/>
+                        <path d="M50 15 L80 27 L80 50 Q80 73 50 85 Q20 73 20 50 L20 27 Z" 
+                              fill="none" stroke="#ffffff" stroke-width="1" opacity="0.5"/>
+                        <text x="50" y="55" text-anchor="middle" fill="#ffffff" font-size="24" font-family="Orbitron">🔒</text>
+                    </svg>
+                </div>
+                <h1 class="game-title">
+                    <span class="title-line">KÜBERKAITSE</span>
+                    <span class="title-line accent">PÕGENEMISTUBA</span>
+                </h1>
+            </div>
+            <p class="game-subtitle">Häkkerid on ründamas! Lahenda küberturvalisuse ülesanded ja päästa server!</p>
+            <div class="difficulty-selector">
+                <p class="difficulty-label">Vali raskusaste:</p>
+                <div class="difficulty-buttons">
+                    <button class="difficulty-btn selected" data-difficulty="easy">
+                        <span class="diff-icon">🟢</span>
+                        <span class="diff-text">Algaja</span>
+                    </button>
+                    <button class="difficulty-btn" data-difficulty="medium">
+                        <span class="diff-icon">🟡</span>
+                        <span class="diff-text">Keskmine</span>
+                    </button>
+                    <button class="difficulty-btn" data-difficulty="hard">
+                        <span class="diff-icon">🔴</span>
+                        <span class="diff-text">Ekspert</span>
+                    </button>
+                </div>
+            </div>
+            <button id="start-btn" class="cyber-btn primary">
+                <span class="btn-text">ALUSTA MISSIOONI</span>
+                <span class="btn-icon">▶</span>
+            </button>
+            <div class="credits">
+                <p>Mäng 7–9 klassi õpilastele</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tutorial Screen -->
+    <div id="tutorial-screen" class="screen">
+        <div class="cyber-grid"></div>
+        <div class="tutorial-container">
+            <div class="tutorial-header">
+                <h2>📡 MISSIOONIJUHISED</h2>
+                <div class="progress-dots">
+                    <span class="dot active" data-step="1"></span>
+                    <span class="dot" data-step="2"></span>
+                    <span class="dot" data-step="3"></span>
+                </div>
+            </div>
+            <div class="tutorial-content">
+                <div class="tutorial-step active" data-step="1">
+                    <div class="step-icon">🏢</div>
+                    <h3>Stsenaarium</h3>
+                    <p>Sa oled küberturvalisuse ekspert. Häkkerid on sisse murdnud meie ettevõtte serverisse ja lukustanud kõik süsteemid. Sul on <strong>30 minutit</strong> aega, et lahendada ülesanded ja päästa andmed!</p>
+                </div>
+                <div class="tutorial-step" data-step="2">
+                    <div class="step-icon">🎮</div>
+                    <h3>Kuidas mängida?</h3>
+                    <ul class="tutorial-list">
+                        <li>🖱️ <strong>Kliki</strong> objektidele, et neid uurida</li>
+                        <li>🔀 <strong>Lohista</strong> ülesandeid lahendama</li>
+                        <li>✅ <strong>Vali</strong> õigeid vastuseid</li>
+                        <li>💡 <strong>Kasuta vihjeid</strong>, kui jääd hätta</li>
+                    </ul>
+                </div>
+                <div class="tutorial-step" data-step="3">
+                    <div class="step-icon">🎯</div>
+                    <h3>Eesmärk</h3>
+                    <p>Lahenda kõik 5 küberturvalisuse ülesannet, et saada lõppkood ja avada server. Iga lahendatud ülesanne annab sulle ühe koodi osa!</p>
+                    <div class="code-preview">
+                        <span class="code-box">?</span>
+                        <span class="code-box">?</span>
+                        <span class="code-box">?</span>
+                        <span class="code-box">?</span>
+                        <span class="code-box">?</span>
+                    </div>
+                </div>
+            </div>
+            <div class="tutorial-nav">
+                <button id="tutorial-prev" class="cyber-btn secondary" disabled>
+                    <span class="btn-icon">◀</span>
+                    <span class="btn-text">Tagasi</span>
+                </button>
+                <button id="tutorial-next" class="cyber-btn primary">
+                    <span class="btn-text">Edasi</span>
+                    <span class="btn-icon">▶</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Game Screen -->
+    <div id="game-screen" class="screen">
+        <div class="cyber-grid"></div>
+        
+        <!-- Top HUD -->
+        <div class="game-hud">
+            <div class="hud-left">
+                <div class="timer-container">
+                    <div class="timer-icon">⏱️</div>
+                    <div class="timer-display">
+                        <span id="timer-minutes">30</span>:<span id="timer-seconds">00</span>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <span class="progress-label">Edenemine:</span>
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <span id="progress-text" class="progress-text">0/5</span>
+                </div>
+            </div>
+            <div class="hud-center">
+                <div class="code-display">
+                    <span class="code-label">AVAMISKOOD:</span>
+                    <div class="code-boxes">
+                        <span id="code-1" class="code-box">?</span>
+                        <span id="code-2" class="code-box">?</span>
+                        <span id="code-3" class="code-box">?</span>
+                        <span id="code-4" class="code-box">?</span>
+                        <span id="code-5" class="code-box">?</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hud-right">
+                <button id="hint-btn" class="cyber-btn small">
+                    <span class="btn-icon">💡</span>
+                    <span class="btn-text">Vihje (<span id="hints-left">3</span>)</span>
+                </button>
+                <button id="menu-btn" class="cyber-btn small secondary">
+                    <span class="btn-icon">☰</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Room Container -->
+        <div class="room-container">
+            <!-- Room Navigation -->
+            <div class="room-nav">
+                <button class="room-nav-btn" data-room="1" disabled>
+                    <span class="room-status">✓</span>
+                    <span class="room-name">Tuba 1</span>
+                </button>
+                <button class="room-nav-btn active" data-room="2">
+                    <span class="room-status">●</span>
+                    <span class="room-name">Tuba 2</span>
+                </button>
+                <button class="room-nav-btn locked" data-room="3">
+                    <span class="room-status">🔒</span>
+                    <span class="room-name">Tuba 3</span>
+                </button>
+                <button class="room-nav-btn locked" data-room="4">
+                    <span class="room-status">🔒</span>
+                    <span class="room-name">Tuba 4</span>
+                </button>
+                <button class="room-nav-btn locked" data-room="5">
+                    <span class="room-status">🔒</span>
+                    <span class="room-name">Server</span>
+                </button>
+            </div>
+
+            <!-- Room 1: Password Security -->
+            <div id="room-1" class="room active">
+                <div class="room-header">
+                    <h2>🔐 Tuba 1: Paroolide Turvalisus</h2>
+                    <p class="room-description">Häkkerid üritavad arvata meie paroole! Sorteeri paroolid turvalisuse järgi.</p>
+                </div>
+                <div class="puzzle-container password-puzzle">
+                    <div class="password-sorter">
+                        <div class="password-categories">
+                            <div class="category weak" data-strength="weak">
+                                <h3>❌ Nõrgad paroolid</h3>
+                                <div class="drop-zone" data-strength="weak"></div>
+                            </div>
+                            <div class="category medium" data-strength="medium">
+                                <h3>⚠️ Keskmised paroolid</h3>
+                                <div class="drop-zone" data-strength="medium"></div>
+                            </div>
+                            <div class="category strong" data-strength="strong">
+                                <h3>✅ Tugevad paroolid</h3>
+                                <div class="drop-zone" data-strength="strong"></div>
+                            </div>
+                        </div>
+                        <div class="passwords-pool">
+                            <div class="password-item draggable" data-password="123456" data-correct="weak">
+                                <span class="password-text">123456</span>
+                            </div>
+                            <div class="password-item draggable" data-password="Koer2023" data-correct="medium">
+                                <span class="password-text">Koer2023</span>
+                            </div>
+                            <div class="password-item draggable" data-password="qwerty" data-correct="weak">
+                                <span class="password-text">qwerty</span>
+                            </div>
+                            <div class="password-item draggable" data-password="K@ss!_M4ja_2024" data-correct="strong">
+                                <span class="password-text">K@ss!_M4ja_2024</span>
+                            </div>
+                            <div class="password-item draggable" data-password="password" data-correct="weak">
+                                <span class="password-text">password</span>
+                            </div>
+                            <div class="password-item draggable" data-password="7Xm#pL9@kW2!" data-correct="strong">
+                                <span class="password-text">7Xm#pL9@kW2!</span>
+                            </div>
+                            <div class="password-item draggable" data-password="Suvi2024!" data-correct="medium">
+                                <span class="password-text">Suvi2024!</span>
+                            </div>
+                            <div class="password-item draggable" data-password="admin" data-correct="weak">
+                                <span class="password-text">admin</span>
+                            </div>
+                            <div class="password-item draggable" data-password="9$Vb&amp;nR#4Lm@xQ" data-correct="strong">
+                                <span class="password-text">9$Vb&amp;nR#4Lm@xQ</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="check-passwords" class="cyber-btn primary check-btn">
+                        <span class="btn-text">Kontrolli vastuseid</span>
+                        <span class="btn-icon">✓</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Room 2: Phishing Detection -->
+            <div id="room-2" class="room">
+                <div class="room-header">
+                    <h2>🎣 Tuba 2: Õngitsuskirjad</h2>
+                    <p class="room-description">Tuvasta kahtlased e-kirjad! Märgi ära kõik ohumärgid igas kirjas.</p>
+                </div>
+                <div class="puzzle-container phishing-puzzle">
+                    <div class="email-viewer">
+                        <div class="email-tabs">
+                            <button class="email-tab active" data-email="1">📧 Kiri 1</button>
+                            <button class="email-tab" data-email="2">📧 Kiri 2</button>
+                            <button class="email-tab" data-email="3">📧 Kiri 3</button>
+                        </div>
+                        <div class="email-content">
+                            <div id="email-1" class="email active">
+                                <div class="email-header">
+                                    <div class="email-from">
+                                        <span class="label">Saatja:</span>
+                                        <span class="value clickable-element" data-suspicious="true" data-reason="Vale domeeninimi">support@sw1sbank-secure.com</span>
+                                    </div>
+                                    <div class="email-to">
+                                        <span class="label">Saaja:</span>
+                                        <span class="value">sina@email.ee</span>
+                                    </div>
+                                    <div class="email-subject">
+                                        <span class="label">Teema:</span>
+                                        <span class="value clickable-element" data-suspicious="true" data-reason="Kiire tegutsemise surve">KIIRE! Teie konto suletakse 24 tunni jooksul!</span>
+                                    </div>
+                                </div>
+                                <div class="email-body">
+                                    <p>Lugupeetud klient,</p>
+                                    <p>Oleme tuvastanud <span class="clickable-element" data-suspicious="true" data-reason="Hirmutamine">kahtlase tegevuse</span> teie kontol. Teie konto <span class="clickable-element" data-suspicious="true" data-reason="Ähvardav sõnum">SULETAKSE</span> kui te ei kinnita oma andmeid koheselt!</p>
+                                    <p>Kliki siia: <span class="clickable-element" data-suspicious="true" data-reason="Kahtlane link">http://swisbank-login.suspicious-site.ru/verify</span></p>
+                                    <p class="clickable-element" data-suspicious="true" data-reason="Isikuandmete küsimine">Palun sisesta oma isikukood ja pangakaardi number.</p>
+                                    <p>Tervitustega,<br><span class="clickable-element" data-suspicious="true" data-reason="Üldine allkiri">Pangameeskond</span></p>
+                                </div>
+                                <div class="email-verdict">
+                                    <span class="verdict-label">Hinnang:</span>
+                                    <div class="verdict-buttons">
+                                        <button class="verdict-btn safe" data-verdict="safe">✅ Turvaline</button>
+                                        <button class="verdict-btn suspicious" data-verdict="suspicious">⚠️ Kahtlane</button>
+                                        <button class="verdict-btn dangerous" data-verdict="dangerous">❌ Ohtlik</button>
+                                    </div>
+                                </div>
+                                <div class="found-issues">
+                                    <h4>Leitud ohumärgid: <span class="issues-count">0</span>/7</h4>
+                                    <div class="issues-list"></div>
+                                </div>
+                            </div>
+                            <div id="email-2" class="email">
+                                <div class="email-header">
+                                    <div class="email-from">
+                                        <span class="label">Saatja:</span>
+                                        <span class="value">info@tallinn.ee</span>
+                                    </div>
+                                    <div class="email-to">
+                                        <span class="label">Saaja:</span>
+                                        <span class="value">sina@email.ee</span>
+                                    </div>
+                                    <div class="email-subject">
+                                        <span class="label">Teema:</span>
+                                        <span class="value">Tallinna linna uudiskiri - november 2024</span>
+                                    </div>
+                                </div>
+                                <div class="email-body">
+                                    <p>Tere!</p>
+                                    <p>Siin on Tallinna linna novembrikuu uudiskiri. Sellel kuul toimub mitmeid põnevaid üritusi:</p>
+                                    <ul>
+                                        <li>Jõuluturg Raekoja platsil</li>
+                                        <li>Tasuta kontserdid Vabaduse väljakul</li>
+                                        <li>Muuseumide öö 25. novembril</li>
+                                    </ul>
+                                    <p>Lisainfo: <span class="clickable-element" data-suspicious="false">https://www.tallinn.ee/uritused</span></p>
+                                    <p>Parimate soovidega,<br>Tallinna Linnavalitsus<br>Vabaduse väljak 7, 15199 Tallinn<br>Tel: 640 4141</p>
+                                </div>
+                                <div class="email-verdict">
+                                    <span class="verdict-label">Hinnang:</span>
+                                    <div class="verdict-buttons">
+                                        <button class="verdict-btn safe" data-verdict="safe">✅ Turvaline</button>
+                                        <button class="verdict-btn suspicious" data-verdict="suspicious">⚠️ Kahtlane</button>
+                                        <button class="verdict-btn dangerous" data-verdict="dangerous">❌ Ohtlik</button>
+                                    </div>
+                                </div>
+                                <div class="found-issues">
+                                    <h4>Leitud ohumärgid: <span class="issues-count">0</span>/0</h4>
+                                    <div class="issues-list"></div>
+                                </div>
+                            </div>
+                            <div id="email-3" class="email">
+                                <div class="email-header">
+                                    <div class="email-from">
+                                        <span class="label">Saatja:</span>
+                                        <span class="value clickable-element" data-suspicious="true" data-reason="Kirjaviga nimes">amaz0n-orders@shipping-notify.net</span>
+                                    </div>
+                                    <div class="email-to">
+                                        <span class="label">Saaja:</span>
+                                        <span class="value">sina@email.ee</span>
+                                    </div>
+                                    <div class="email-subject">
+                                        <span class="label">Teema:</span>
+                                        <span class="value clickable-element" data-suspicious="true" data-reason="Võlts tellimuse teade">Teie tellimus #AMZ-847291 on teel!</span>
+                                    </div>
+                                </div>
+                                <div class="email-body">
+                                    <p>Tere klient,</p>
+                                    <p>Teie tellimus on saadetud! <span class="clickable-element" data-suspicious="true" data-reason="Võlts tellimus, mida ei tehtud">Tellimus sisaldab: iPhone 15 Pro Max (1699€)</span></p>
+                                    <p class="clickable-element" data-suspicious="true" data-reason="Hirmutamine vale tellimusega">Kui see ei olnud teie tellimus, tühistage see KOHESELT!</p>
+                                    <p>Tühista tellimus: <span class="clickable-element" data-suspicious="true" data-reason="Kahtlane link">http://amazon-cancel.sketchy-domain.xyz/cancel</span></p>
+                                    <p>Amazon Klienditeenindus</p>
+                                </div>
+                                <div class="email-verdict">
+                                    <span class="verdict-label">Hinnang:</span>
+                                    <div class="verdict-buttons">
+                                        <button class="verdict-btn safe" data-verdict="safe">✅ Turvaline</button>
+                                        <button class="verdict-btn suspicious" data-verdict="suspicious">⚠️ Kahtlane</button>
+                                        <button class="verdict-btn dangerous" data-verdict="dangerous">❌ Ohtlik</button>
+                                    </div>
+                                </div>
+                                <div class="found-issues">
+                                    <h4>Leitud ohumärgid: <span class="issues-count">0</span>/6</h4>
+                                    <div class="issues-list"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="check-phishing" class="cyber-btn primary check-btn">
+                        <span class="btn-text">Kontrolli vastuseid</span>
+                        <span class="btn-icon">✓</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Room 3: Network Security -->
+            <div id="room-3" class="room">
+                <div class="room-header">
+                    <h2>🌐 Tuba 3: Võrguturvalisus</h2>
+                    <p class="room-description">Ühenda turvalisuse tööriist õige kirjeldusega!</p>
+                </div>
+                <div class="puzzle-container network-puzzle">
+                    <div class="matching-game">
+                        <div class="match-column tools">
+                            <h3>🛡️ Tööriistad</h3>
+                            <div class="match-item tool" data-match="firewall">
+                                <span class="icon">🧱</span>
+                                <span class="text">Tulemüür (Firewall)</span>
+                            </div>
+                            <div class="match-item tool" data-match="antivirus">
+                                <span class="icon">🦠</span>
+                                <span class="text">Viirusetõrje</span>
+                            </div>
+                            <div class="match-item tool" data-match="vpn">
+                                <span class="icon">🔐</span>
+                                <span class="text">VPN</span>
+                            </div>
+                            <div class="match-item tool" data-match="2fa">
+                                <span class="icon">📱</span>
+                                <span class="text">Kaheastmeline kinnitamine</span>
+                            </div>
+                            <div class="match-item tool" data-match="backup">
+                                <span class="icon">💾</span>
+                                <span class="text">Varukoopia</span>
+                            </div>
+                        </div>
+                        <div class="match-lines">
+                            <svg class="connection-svg"></svg>
+                        </div>
+                        <div class="match-column descriptions">
+                            <h3>📝 Kirjeldused</h3>
+                            <div class="match-item description" data-match="backup">
+                                <span class="text">Salvestab andmete koopia turvaliselt teise asukohta</span>
+                            </div>
+                            <div class="match-item description" data-match="firewall">
+                                <span class="text">Filtreerib võrguliiklust ja blokeerib ohtlikud ühendused</span>
+                            </div>
+                            <div class="match-item description" data-match="2fa">
+                                <span class="text">Nõuab lisaks paroolile teist kinnitusviisi</span>
+                            </div>
+                            <div class="match-item description" data-match="antivirus">
+                                <span class="text">Skaneerib ja eemaldab pahavara arvutist</span>
+                            </div>
+                            <div class="match-item description" data-match="vpn">
+                                <span class="text">Krüpteerib internetiühenduse ja peidab IP-aadressi</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="check-network" class="cyber-btn primary check-btn">
+                        <span class="btn-text">Kontrolli vastuseid</span>
+                        <span class="btn-icon">✓</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Room 4: Social Engineering -->
+            <div id="room-4" class="room">
+                <div class="room-header">
+                    <h2>🎭 Tuba 4: Manipulatsioon</h2>
+                    <p class="room-description">Vali iga olukorra puhul kõige turvalisem käitumisviis!</p>
+                </div>
+                <div class="puzzle-container social-puzzle">
+                    <div class="scenario-viewer">
+                        <div class="scenario-progress">
+                            <span>Olukord <span id="scenario-current">1</span> / 4</span>
+                        </div>
+                        
+                        <div id="scenario-1" class="scenario active">
+                            <div class="scenario-card">
+                                <div class="scenario-icon">📞</div>
+                                <div class="scenario-text">
+                                    <h4>Telefonikõne</h4>
+                                    <p>Sulle helistab keegi, kes ütleb, et on IT-toest. Ta palub sul öelda oma parooli, et "kontrollida süsteemi turvalisust". Mida teed?</p>
+                                </div>
+                            </div>
+                            <div class="scenario-choices">
+                                <button class="choice-btn" data-correct="false">
+                                    <span class="choice-icon">❌</span>
+                                    <span class="choice-text">Ütlen oma parooli, sest IT-tugi vajab seda</span>
+                                </button>
+                                <button class="choice-btn" data-correct="true">
+                                    <span class="choice-icon">✅</span>
+                                    <span class="choice-text">Keeldun ja helistan ise IT-toele tagasi kontrollimiseks</span>
+                                </button>
+                                <button class="choice-btn" data-correct="false">
+                                    <span class="choice-icon">❌</span>
+                                    <span class="choice-text">Küsin ta nime ja ütlen siis parooli</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="scenario-2" class="scenario">
+                            <div class="scenario-card">
+                                <div class="scenario-icon">💻</div>
+                                <div class="scenario-text">
+                                    <h4>Võõras USB-mälupulk</h4>
+                                    <p>Leiad kooli koridorist USB-mälupulga, millel on silt "Palgaandmed 2024". Mida teed?</p>
+                                </div>
+                            </div>
+                            <div class="scenario-choices">
+                                <button class="choice-btn" data-correct="false">
+                                    <span class="choice-icon">❌</span>
+                                    <span class="choice-text">Ühendan oma arvutiga, et vaadata, mis seal on</span>
+                                </button>
+                                <button class="choice-btn" data-correct="false">
+                                    <span class="choice-icon">❌</span>
+                                    <span class="choice-text">Annan sõbrale, et tema vaataks</span>
+                                </button>
+                                <button class="choice-btn" data-correct="true">
+                                    <span class="choice-icon">✅</span>
+                                    <span class="choice-text">Viin IT-osakonda või jätan sinna, kust leidsin</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="scenario-3" class="scenario">
+                            <div class="scenario-card">
+                                <div class="scenario-icon">👤</div>
+                                <div class="scenario-text">
+                                    <h4>Sotsiaalmeedias</h4>
+                                    <p>Saad Instagramis sõnumi võõralt kontolt: "Tere! Võitsin tasuta iPhone'i! Sisesta oma andmed siia lingile ja saad ka ühe!" Mida teed?</p>
+                                </div>
+                            </div>
+                            <div class="scenario-choices">
+                                <button class="choice-btn" data-correct="false">
+                                    <span class="choice-icon">❌</span>
+                                    <span class="choice-text">Klikkin lingile - äkki on tõesti võimalus võita!</span>
+                                </button>
+                                <button class="choice-btn" data-correct="true">
+                                    <span class="choice-icon">✅</span>
+                                    <span class="choice-text">Ignoreerin sõnumit ja blokeerin konto</span>
+                                </button>
+                                <button class="choice-btn" data-correct="false">
+                                    <span class="choice-icon">❌</span>
+                                    <span class="choice-text">Jagan linki sõpradega, et nemadki saaksid</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="scenario-4" class="scenario">
+                            <div class="scenario-card">
+                                <div class="scenario-icon">🏢</div>
+                                <div class="scenario-text">
+                                    <h4>Tundmatu külastaja</h4>
+                                    <p>Keegi tuleb kooli ja ütleb, et on tehnik, kes peab "võrku kontrollima". Ta palub sul anda talle arvuti ligipääs. Mida teed?</p>
+                                </div>
+                            </div>
+                            <div class="scenario-choices">
+                                <button class="choice-btn" data-correct="false">
+                                    <span class="choice-icon">❌</span>
+                                    <span class="choice-text">Annan ligipääsu, sest ta näeb usaldusväärne välja</span>
+                                </button>
+                                <button class="choice-btn" data-correct="false">
+                                    <span class="choice-icon">❌</span>
+                                    <span class="choice-text">Küsin tema nime ja lasen tal töötada</span>
+                                </button>
+                                <button class="choice-btn" data-correct="true">
+                                    <span class="choice-icon">✅</span>
+                                    <span class="choice-text">Palun tal oodata ja teavitan õpetajat/IT-meeskonda</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="scenario-feedback" id="scenario-feedback"></div>
+                </div>
+            </div>
+
+            <!-- Room 5: Final Server -->
+            <div id="room-5" class="room">
+                <div class="room-header">
+                    <h2>🖥️ Server: Lõppülesanne</h2>
+                    <p class="room-description">Sisesta kogutud kood, et avada server ja päästa andmed!</p>
+                </div>
+                <div class="puzzle-container server-puzzle">
+                    <div class="server-animation">
+                        <div class="server-rack">
+                            <div class="server-unit locked">
+                                <div class="server-lights">
+                                    <span class="light red"></span>
+                                    <span class="light red"></span>
+                                    <span class="light red"></span>
+                                </div>
+                                <div class="server-status">🔒 LUKUSTATUD</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-entry">
+                        <h3>Sisesta avamiskood:</h3>
+                        <div class="code-input-container">
+                            <div class="code-slots">
+                                <button class="code-slot" data-slot="1" data-value="">
+                                    <span class="slot-value">?</span>
+                                </button>
+                                <button class="code-slot" data-slot="2" data-value="">
+                                    <span class="slot-value">?</span>
+                                </button>
+                                <button class="code-slot" data-slot="3" data-value="">
+                                    <span class="slot-value">?</span>
+                                </button>
+                                <button class="code-slot" data-slot="4" data-value="">
+                                    <span class="slot-value">?</span>
+                                </button>
+                                <button class="code-slot" data-slot="5" data-value="">
+                                    <span class="slot-value">?</span>
+                                </button>
+                            </div>
+                            <div class="code-options">
+                                <button class="code-option" data-code="A">A</button>
+                                <button class="code-option" data-code="B">B</button>
+                                <button class="code-option" data-code="C">C</button>
+                                <button class="code-option" data-code="D">D</button>
+                                <button class="code-option" data-code="E">E</button>
+                                <button class="code-option" data-code="F">F</button>
+                                <button class="code-option" data-code="G">G</button>
+                                <button class="code-option" data-code="H">H</button>
+                                <button class="code-option" data-code="1">1</button>
+                                <button class="code-option" data-code="2">2</button>
+                                <button class="code-option" data-code="3">3</button>
+                                <button class="code-option" data-code="4">4</button>
+                                <button class="code-option" data-code="5">5</button>
+                                <button class="code-option" data-code="6">6</button>
+                                <button class="code-option" data-code="7">7</button>
+                                <button class="code-option" data-code="8">8</button>
+                            </div>
+                        </div>
+                        <button id="unlock-server" class="cyber-btn primary">
+                            <span class="btn-text">AVA SERVER</span>
+                            <span class="btn-icon">🔓</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Screen -->
+    <div id="success-screen" class="screen">
+        <div class="cyber-grid"></div>
+        <div class="success-content">
+            <div class="success-animation">
+                <div class="trophy">🏆</div>
+                <div class="confetti"></div>
+            </div>
+            <h1>MISSIOON TÄIDETUD!</h1>
+            <p class="success-message">Sa päästsid serveri ja blokeerisid häkkerite rünnaku!</p>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <span class="stat-icon">⏱️</span>
+                    <span class="stat-value" id="final-time">--:--</span>
+                    <span class="stat-label">Aeg</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">💡</span>
+                    <span class="stat-value" id="hints-used">0</span>
+                    <span class="stat-label">Vihjeid kasutatud</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-icon">⭐</span>
+                    <span class="stat-value" id="final-score">0</span>
+                    <span class="stat-label">Punktid</span>
+                </div>
+            </div>
+            <div class="certificate">
+                <h3>🎓 KÜBERKAITSE SERTIFIKAAT</h3>
+                <p>Tunnistame, et mängija on edukalt läbinud küberturvalisuse põgenemistoa ja demonstreerinud teadmisi:</p>
+                <ul>
+                    <li>✓ Paroolide turvalisus</li>
+                    <li>✓ Õngitsuskirjade tuvastamine</li>
+                    <li>✓ Võrguturvalisuse alused</li>
+                    <li>✓ Sotsiaalse manipulatsiooni äratundmine</li>
+                </ul>
+            </div>
+            <button id="play-again-btn" class="cyber-btn primary">
+                <span class="btn-text">MÄNGI UUESTI</span>
+                <span class="btn-icon">🔄</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="gameover-screen" class="screen">
+        <div class="cyber-grid"></div>
+        <div class="gameover-content">
+            <div class="gameover-icon">💀</div>
+            <h1>AEG LÄBI!</h1>
+            <p class="gameover-message">Häkkerid said serveri üle kontrolli. Proovi uuesti!</p>
+            <div class="gameover-stats">
+                <p>Lahendatud ülesandeid: <span id="completed-puzzles">0</span>/5</p>
+            </div>
+            <button id="retry-btn" class="cyber-btn primary">
+                <span class="btn-text">PROOVI UUESTI</span>
+                <span class="btn-icon">🔄</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Hint Modal -->
+    <div id="hint-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💡 Vihje</h3>
+                <button class="close-modal">×</button>
+            </div>
+            <div class="modal-body">
+                <p id="hint-text"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="cyber-btn secondary close-hint">Sulge</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Modal -->
+    <div id="menu-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>☰ Menüü</h3>
+                <button class="close-modal">×</button>
+            </div>
+            <div class="modal-body menu-options">
+                <button id="resume-btn" class="cyber-btn primary menu-btn">
+                    <span class="btn-icon">▶</span>
+                    <span class="btn-text">Jätka mängu</span>
+                </button>
+                <button id="restart-btn" class="cyber-btn secondary menu-btn">
+                    <span class="btn-icon">🔄</span>
+                    <span class="btn-text">Alusta algusest</span>
+                </button>
+                <button id="quit-btn" class="cyber-btn danger menu-btn">
+                    <span class="btn-icon">🚪</span>
+                    <span class="btn-text">Lõpeta mäng</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Toast -->
+    <div id="feedback-toast" class="toast">
+        <span class="toast-icon"></span>
+        <span class="toast-message"></span>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
