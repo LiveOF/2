@@ -1,5 +1,31 @@
 /* Responsive styles for the feedback form container */
 
+/* Navigation bar */
+.page-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 12px 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  text-align: right;
+}
+
+.page-nav .nav-link {
+  color: #11c26f;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: color 0.2s ease;
+}
+
+.page-nav .nav-link:hover {
+  color: #0d9956;
+  text-decoration: underline;
+}
+
 /* Simple reset and page background */
 :root{
   --container-max: 1000px;
@@ -23,6 +49,7 @@ body{
   -moz-osx-font-smoothing:grayscale;
   color:#111;
   padding:28px;
+  padding-top: 60px; /* Account for fixed nav */
 }
 
 /* Page centering wrapper */

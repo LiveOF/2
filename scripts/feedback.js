@@ -127,6 +127,10 @@
 
       alert('Thanks for your feedback!');
       reset(rows);
+      // Trigger dashboard refresh if it's open in another tab
+      if (window.opener && typeof window.opener.refreshDashboard === 'function') {
+        window.opener.refreshDashboard();
+      }
     } catch (e) {
       console.error(e);
       alert('Failed to submit feedback. Please try again.');
